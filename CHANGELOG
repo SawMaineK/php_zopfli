@@ -1,0 +1,4 @@
+
+0.1
+first public release - just putted some code around zopfli to use it as extension
+maybe a replacement for gzencode()
