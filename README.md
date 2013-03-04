@@ -1,6 +1,8 @@
+
 php_zopfli
 ==========
 PHP-Extension for compressing content with zopfli. 
+
 
 Install
 ==========
@@ -9,6 +11,7 @@ Put this single line in your php.ini and put the extension in the same place as 
 extension=php_zopfli.(so|dll)
 ```
 
+
 Configure defaults
 ==========
 Optional configure the default number of iterations in your php.ini. Whenever you call zopfliencode() without the 2nd argument the php.ini default value is used instead.
@@ -16,6 +19,7 @@ Optional configure the default number of iterations in your php.ini. Whenever yo
 [Zopfli]
 zopfli.iterations = 5
 ```
+
 
 Example
 ==========
@@ -44,3 +48,10 @@ echo $data;
 
 ?>
 ```
+
+
+More Information
+==========
+Zopfli was written by Jyrki Alakuijala, Ph.D. and Lode Vandevenne, M.Sc. from Google Inc.
+You will find the projects homepage here: http://code.google.com/p/zopfli/
+and the whitepaper here: http://code.google.com/p/zopfli/downloads/detail?name=Data_compression_using_Zopfli.pdf.
