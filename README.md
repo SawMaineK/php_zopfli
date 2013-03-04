@@ -6,17 +6,20 @@ Install
 ==========
 Put this single line in your php.ini and put the extension in the same place as the other default extensions
 ```
-[win]
-extension=php_zopfli.dll
+extension=php_zopfli.(so|dll)
+```
 
-[lin]
-extension=php_zopfli.so
+Configure defaults
+==========
+Optional configure the default number of iterations in your php.ini. Whenever you call zopfliencode() without the 2nd argument the php.ini default value is used instead.
+```
+[Zopfli]
+zopfli.iterations = 5
 ```
 
 Example
 ==========
-php_zopfli can be used as replacement for gzip compression. Just call zopfliencode() instead of gzencode().
-The second argument is the iteration counter and can be some value between 1 and 1000. 
+php_zopfli can be used as replacement for gzip/zlib compression - zopfli is 100% compatible with gzip + zlib so your browser will understand the zopfli output as well - just call zopfliencode() instead of gzencode(). The second argument is the optional iteration counter (a value between 1 and [max?]1000).
 Usage example:
 
 ```php
