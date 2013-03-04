@@ -22,17 +22,26 @@
 extern zend_module_entry zopfli_module_entry;
 #define phpext_zopfli_ptr &zopfli_module_entry
 
-#define PHP_ZOPFLI_VERSION "0.1"
+#define PHP_ZOPFLI_VERSION "0.2"
 #define PHP_ZOPFLI_EXTNAME "zopfli"
 
 #ifdef PHP_WIN32
 #define PHP_ZOPFLI_API __declspec(dllexport)
-#include "win32/php_zopfli_win32.h"
-#include "win32/php_zopfli_win32.c"
 #else
 #define PHP_ZOPFLI_API
 #endif
 
+// get zopfli files and headers
+#include "zopfli/util.c"
+#include "zopfli/tree.c"
+#include "zopfli/deflate.c"
+#include "zopfli/gzip_container.c"
+#include "zopfli/katajainen.c"
+#include "zopfli/lz77.c"
+#include "zopfli/cache.c"
+#include "zopfli/squeeze.c"
+#include "zopfli/blocksplitter.c"
+#include "zopfli/hash.c"
 
 #ifdef ZTS
 #include "TSRM.h"
@@ -43,9 +52,6 @@ extern zend_module_entry zopfli_module_entry;
  */
 PHP_MINIT_FUNCTION(zopfli);
 PHP_MSHUTDOWN_FUNCTION(zopfli);
-PHP_RINIT_FUNCTION(zopfli);
-PHP_RSHUTDOWN_FUNCTION(zopfli);
-PHP_MINFO_FUNCTION(zopfli);
 
 /**
  * declare methods available in PHP
@@ -53,4 +59,3 @@ PHP_MINFO_FUNCTION(zopfli);
 PHP_FUNCTION(zopfliencode);
 
 #endif  /* PHP_ZOPFLI_H */
-

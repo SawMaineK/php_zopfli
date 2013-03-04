@@ -25,51 +25,54 @@
 # define _GNU_SOURCE
 #endif
 
+// general extension related
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_zopfli.h"
 #include "Zend/zend_extensions.h"
 
-// get zopfli required lib files
+// get required lib files
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "deflate.h"
-#include "gzip_container.h"
 
 
-/* compiled function list so Zend knows what's in this module */    
+// PHP ini mod
+PHP_INI_BEGIN()
+PHP_INI_ENTRY("zopfli.iterations", "5", PHP_INI_ALL, NULL)
+PHP_INI_END()
+
+// compiled function list so Zend knows what's in this module
 zend_function_entry zopfli_functions[] = {    
    ZEND_FE(zopfliencode, NULL)
    {NULL, NULL, NULL}
 };
 
 /* compiled module information */    
-zend_module_entry zopfli_module_entry = {  
-  #if ZEND_MODULE_API_NO >= 20010901  
-    STANDARD_MODULE_HEADER,           // Roughly means if PHP Version > 4.2.0  
-  #endif  
-    PHP_ZOPFLI_EXTNAME,               // Define PHP extension name  
-    zopfli_functions,                 /* Functions */  
-    NULL,                             /* MINIT */  
-    NULL,                             /* MSHUTDOWN */  
-    NULL,                             /* RINIT */  
-    NULL,                             /* RSHUTDOWN */  
-    NULL,                             /* MINFO */  
-  #if ZEND_MODULE_API_NO >= 20010901  
+zend_module_entry zopfli_module_entry = {
+  #if ZEND_MODULE_API_NO >= 20010901
+    STANDARD_MODULE_HEADER,           // Roughly means if PHP Version > 4.2.0
+  #endif
+    PHP_ZOPFLI_EXTNAME,               // Define PHP extension name
+    zopfli_functions,                 /* Functions */
+    PHP_MINIT(zopfli),                /* MINIT */
+    PHP_MSHUTDOWN(zopfli),            /* MSHUTDOWN */
+    NULL,                             /* RINIT */
+    NULL,                             /* RSHUTDOWN */
+    NULL,                             /* MINFO */
+  #if ZEND_MODULE_API_NO >= 20010901
     PHP_ZOPFLI_VERSION,               // Roughly means if PHP Version > 4.2.0  
-  #endif  
-    STANDARD_MODULE_PROPERTIES  
-};  
+  #endif
+    STANDARD_MODULE_PROPERTIES
+};
 #ifdef COMPILE_DL_ZOPFLI
-ZEND_GET_MODULE(zopfli)     // Common for all PHP extensions which are build as shared modules
+ZEND_GET_MODULE(zopfli)               // Common for all PHP extensions which are build as shared modules
 #endif
 
-
+/* ? */
 ZEND_FUNCTION(zopfliencode);
-
 
 /* ZOPFLI */
 ZEND_FUNCTION(zopfliencode)
@@ -78,29 +81,56 @@ ZEND_FUNCTION(zopfliencode)
     size_t   len_buffer;
     char    *output      = 0;
     size_t   len_output  = 0;
-    int      iterations  = 1;
+    long     iterations;
+    int      len_iterations;
     Options  options;
-    char    *result;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|s", &buffer, &iterations) == FAILURE) {
-        //RETURN_STRING("Bad parameters!", 1);
-        RETURN_NULL();
+    if (zend_parse_parameters(
+        ZEND_NUM_ARGS() TSRMLS_CC, 
+        "s|l", 
+        &buffer, 
+        &len_buffer, 
+        &iterations, 
+        &len_iterations) == FAILURE
+    ) {
+        RETURN_STRING("Bad parameters!", 1);
     }
 
-    // size of input buffer
-    len_buffer = strlen(buffer);
+    if (!iterations) {
+        iterations = INI_INT("zopfli.iterations");
+    }
 
     // set options defaults
     options.verbose            = 0;
-    options.numiterations      = iterations;
+    options.numiterations      = (int)iterations;
     options.blocksplitting     = 1;
     options.blocksplittinglast = 0;
     options.blocksplittingmax  = 15;
 
     // compress input
-    GzipCompress(&options, buffer, len_buffer, &output, &len_output);
+    GzipCompress(
+        &options, 
+        buffer, 
+        len_buffer, 
+        &output, 
+        &len_output
+    );
     
-    // return result STRINGL ->
-    // cause otherwise binary data could be cutted randomly at \0 null byte in string
+    // return result STRINGL otherwise binary data could 
+    // be cutted randomly at \0 null byte in string
     RETURN_STRINGL(output, len_output, 1);
+}
+
+// init method
+PHP_MINIT_FUNCTION(zopfli)
+{
+    REGISTER_INI_ENTRIES();
+    return SUCCESS;
+}
+
+// shutdown method
+PHP_MSHUTDOWN_FUNCTION(zopfli)
+{
+    UNREGISTER_INI_ENTRIES();
+    return SUCCESS;
 }
