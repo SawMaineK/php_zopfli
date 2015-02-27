@@ -1,6 +1,7 @@
 
-php_zopfli
-==========
+<img src="https://avatars2.githubusercontent.com/u/514566?v=3&u=4615dfc4970d93dea5d3eaf996b7903ee6e24e20&s=140" align="right" />
+---
+# php_zopfli
 PHP-Extension for compressing content with zopfli. 
 
 
@@ -55,7 +56,3 @@ More Information
 Zopfli was written by Jyrki Alakuijala, Ph.D. and Lode Vandevenne, M.Sc. from Google Inc.
 You will find the projects homepage here: http://code.google.com/p/zopfli/
 and the whitepaper here: http://code.google.com/p/zopfli/downloads/detail?name=Data_compression_using_Zopfli.pdf.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/clickalicious/php_zopfli/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
