@@ -1,4 +1,11 @@
 
+0.2.0
+ - Restructured project
+ - Added more documentation
+ - Made compile process compatible with nmake on win
+ - Prepared for PECL
+ - Added new Zopfli code with a lot of fixes
+
 0.1
-first public release - just putted some code around zopfli to use it as extension
+First public release - just putted some code around zopfli to use it as extension
 maybe a replacement for gzencode()
