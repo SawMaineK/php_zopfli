@@ -181,7 +181,47 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\zopfli.c"
+				RelativePath=".\zopfli\blocksplitter.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\cache.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\deflate.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\gzip_container.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\hash.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\katajainen.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\lz77.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\squeeze.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\tree.c"
+				>
+			</File>
+			<File
+				RelativePath=".\zopfli\util.c"
+				>
+			</File>
+			<File
+				RelativePath=".\php_zopfli.c"
 				>
 			</File>
 		</Filter>

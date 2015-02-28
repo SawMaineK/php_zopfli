@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+ARG_ENABLE("zopfli", "whether to enable zopfli support", "no");
+
+if (PHP_ZOPFLI != "no") {
+
+	EXTENSION("zopfli", "php_zopfli.c", true)
+	ADD_SOURCES(configure_module_dirname + "/zopfli", "zopfli.c zlib_container.c util.c tree.c squeeze.c lz77.c katajainen.c hash.c gzip_container.c deflate.c cache.c blocksplitter.c", "zopfli");
+	ADD_SOURCES(configure_module_dirname + "/win32", "php_zopfli_win32.c", "zopfli");
+
+	AC_DEFINE('HAVE_ZOPFLI', 1, 'Have zopfli support');
+}
