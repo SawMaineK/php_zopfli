@@ -22,7 +22,7 @@
 extern zend_module_entry zopfli_module_entry;
 #define phpext_zopfli_ptr &zopfli_module_entry
 
-#define PHP_ZOPFLI_VERSION "0.1.0"
+#define PHP_ZOPFLI_VERSION "0.2.0"
 #define PHP_ZOPFLI_EXTNAME "zopfli"
 
 #ifdef PHP_WIN32

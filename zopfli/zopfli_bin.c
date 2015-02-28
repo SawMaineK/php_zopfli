@@ -76,19 +76,13 @@ static void SaveFile(const char* filename,
   fclose(file);
 }
 
-typedef enum {
-  OUTPUT_GZIP,
-  OUTPUT_ZLIB,
-  OUTPUT_DEFLATE
-} OutputType;
-
 /*
 outfilename: filename to write output to, or 0 to write to stdout instead
 */
-void CompressFile(const Options* options,
-                  OutputType output_type,
-                  const char* infilename,
-                  const char* outfilename) {
+static void CompressFile(const ZopfliOptions* options,
+                         ZopfliFormat output_type,
+                         const char* infilename,
+                         const char* outfilename) {
   unsigned char* in;
   size_t insize;
   unsigned char* out = 0;
@@ -98,16 +92,9 @@ void CompressFile(const Options* options,
     fprintf(stderr, "Invalid filename: %s\n", infilename);
     return;
   }
-  if (output_type == OUTPUT_GZIP) {
-    GzipCompress(options, in, insize, &out, &outsize);
-  } else if (output_type == OUTPUT_ZLIB) {
-    ZlibCompress(options, in, insize, &out, &outsize);
-  } else if (output_type == OUTPUT_DEFLATE) {
-    unsigned char bp = 0;
-    Deflate(options, 2 /* Dynamic block */, 1, in, insize, &bp, &out, &outsize);
-  } else {
-    assert(0);
-  }
+
+  ZopfliCompress(options, output_type, in, insize, &out, &outsize);
+
   if (outfilename) {
     SaveFile(outfilename, out, outsize);
   } else {
@@ -139,49 +126,50 @@ static char StringsEqual(const char* str1, const char* str2) {
 }
 
 int main(int argc, char* argv[]) {
-  Options options;
+  ZopfliOptions options;
+  ZopfliFormat output_type = ZOPFLI_FORMAT_GZIP;
   const char* filename = 0;
   int output_to_stdout = 0;
   int i;
-  OutputType output_type = OUTPUT_GZIP;
 
-  InitOptions(&options);
+  ZopfliInitOptions(&options);
 
   for (i = 1; i < argc; i++) {
-    if (StringsEqual(argv[i], "-v")) options.verbose = 1;
-    else if (StringsEqual(argv[i], "-c")) output_to_stdout = 1;
-    else if (StringsEqual(argv[i], "--deflate")) output_type = OUTPUT_DEFLATE;
-    else if (StringsEqual(argv[i], "--zlib")) output_type = OUTPUT_ZLIB;
-    else if (StringsEqual(argv[i], "--gzip")) output_type = OUTPUT_GZIP;
-    else if (StringsEqual(argv[i], "--i5")) options.numiterations = 5;
-    else if (StringsEqual(argv[i], "--i10")) options.numiterations = 10;
-    else if (StringsEqual(argv[i], "--i15")) options.numiterations = 15;
-    else if (StringsEqual(argv[i], "--i25")) options.numiterations = 25;
-    else if (StringsEqual(argv[i], "--i50")) options.numiterations = 50;
-    else if (StringsEqual(argv[i], "--i100")) options.numiterations = 100;
-    else if (StringsEqual(argv[i], "--i250")) options.numiterations = 250;
-    else if (StringsEqual(argv[i], "--i500")) options.numiterations = 500;
-    else if (StringsEqual(argv[i], "--i1000")) options.numiterations = 1000;
-    else if (StringsEqual(argv[i], "-h")) {
-      fprintf(stderr, "Usage: zopfli [OPTION]... FILE\n"
+    const char* arg = argv[i];
+    if (StringsEqual(arg, "-v")) options.verbose = 1;
+    else if (StringsEqual(arg, "-c")) output_to_stdout = 1;
+    else if (StringsEqual(arg, "--deflate")) {
+      output_type = ZOPFLI_FORMAT_DEFLATE;
+    }
+    else if (StringsEqual(arg, "--zlib")) output_type = ZOPFLI_FORMAT_ZLIB;
+    else if (StringsEqual(arg, "--gzip")) output_type = ZOPFLI_FORMAT_GZIP;
+    else if (StringsEqual(arg, "--splitlast")) options.blocksplittinglast = 1;
+    else if (arg[0] == '-' && arg[1] == '-' && arg[2] == 'i'
+        && arg[3] >= '0' && arg[3] <= '9') {
+      options.numiterations = atoi(arg + 3);
+    }
+    else if (StringsEqual(arg, "-h")) {
+      fprintf(stderr,
+          "Usage: zopfli [OPTION]... FILE\n"
           "  -h    gives this help\n"
           "  -c    write the result on standard output, instead of disk"
           " filename + '.gz'\n"
           "  -v    verbose mode\n"
-          "  --gzip  output to gzip format (default)\n"
-          "  --deflate  output to deflate format instead of gzip\n"
-          "  --zlib  output to zlib format instead of gzip\n");
-      fprintf(stderr, "  --i5  less compression, but faster\n"
-          "  --i10  less compression, but faster\n"
-          "  --i15  default compression, 15 iterations\n"
-          "  --i25  more compression, but slower\n"
-          "  --i50  more compression, but slower\n"
-          "  --i100  more compression, but slower\n"
-          "  --i250  more compression, but slower\n"
-          "  --i500  more compression, but slower\n"
-          "  --i1000  more compression, but slower\n");
+          "  --i#  perform # iterations (default 15). More gives"
+          " more compression but is slower."
+          " Examples: --i10, --i50, --i1000\n");
+      fprintf(stderr,
+          "  --gzip        output to gzip format (default)\n"
+          "  --zlib        output to zlib format instead of gzip\n"
+          "  --deflate     output to deflate format instead of gzip\n"
+          "  --splitlast   do block splitting last instead of first\n");
       return 0;
     }
+  }
+
+  if (options.numiterations < 1) {
+    fprintf(stderr, "Error: must have 1 or more iterations");
+    return 0;
   }
 
   for (i = 1; i < argc; i++) {
@@ -190,14 +178,13 @@ int main(int argc, char* argv[]) {
       filename = argv[i];
       if (output_to_stdout) {
         outfilename = 0;
-      } else if (output_type == OUTPUT_GZIP) {
+      } else if (output_type == ZOPFLI_FORMAT_GZIP) {
         outfilename = AddStrings(filename, ".gz");
-      } else if (output_type == OUTPUT_ZLIB) {
+      } else if (output_type == ZOPFLI_FORMAT_ZLIB) {
         outfilename = AddStrings(filename, ".zlib");
-      } else if (output_type == OUTPUT_DEFLATE) {
-        outfilename = AddStrings(filename, ".deflate");
       } else {
-        assert(0);
+        assert(output_type == ZOPFLI_FORMAT_DEFLATE);
+        outfilename = AddStrings(filename, ".deflate");
       }
       if (options.verbose && outfilename) {
         fprintf(stderr, "Saving to: %s\n", outfilename);

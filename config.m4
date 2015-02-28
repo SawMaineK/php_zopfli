@@ -6,7 +6,7 @@ PHP_ARG_ENABLE(zopfli, whether to enable zopfli support,
 
 if test "$PHP_ZOPFLI" != "no"; then
 
-  fastlz_sources="zopfli/zopfli.c\
+  zopfli_sources="zopfli/zopfli_bin.c\
 					php_zopfli.c"
 
   PHP_NEW_EXTENSION(zopfli, php_zopfli.c, $ext_shared)

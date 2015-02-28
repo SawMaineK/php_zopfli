@@ -1,12 +1,12 @@
-php_zopfli windows builds
-===
+# php_zopfli 
 
-More information
--------------------------
-Visit my blog www.phpfluesterer.de to get in contact with me if you have trouble building 
-php_zopfli on windows or if you're looking for the latest windows builds.
+## Windows Builds
+
+### More information
+
+Visit our website [www.clickalicious.de](https://www.clickalicious.de "home of clickalicious") to get in contact with us or if you have trouble building `php_zopfli` on windows or if you're just looking for the [latest windows builds](https://www.clickalicious.de/).
 
 
-Latest windows builds
--------------------------
-http://www.phpfluesterer.de/
+### Latest windows builds
+
+https://www.clickalicious.de
