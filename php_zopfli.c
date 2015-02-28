@@ -76,17 +76,17 @@ ZEND_FUNCTION(zopfliencode);
 /* ZOPFLI */
 ZEND_FUNCTION(zopfliencode)
 {
-    char    *buffer;
-    size_t   len_buffer;
-    char    *output      = 0;
-    size_t   len_output  = 0;
-    int      iterations  = 1;
-    Options  options;
-    char    *result;
+    char          *buffer;
+    size_t         len_buffer;
+    char          *output      = 0;
+    size_t         len_output  = 0;
+    int            iterations  = 1;
+    ZopfliOptions  options;
+    char          *result;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|s", &buffer, &iterations) == FAILURE) {
-        //RETURN_STRING("Bad parameters!", 1);
-        RETURN_NULL();
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &buffer, &iterations) == FAILURE) {
+        RETURN_STRING("Bad parameters!", 1);
+        //RETURN_NULL();
     }
 
     // size of input buffer
@@ -100,7 +100,7 @@ ZEND_FUNCTION(zopfliencode)
     options.blocksplittingmax  = 15;
 
     // compress input
-    GzipCompress(&options, buffer, len_buffer, &output, &len_output);
+    ZopfliGzipCompress(&options, buffer, len_buffer, &output, &len_output);
 
     // return result STRINGL ->
     // cause otherwise binary data could be cutted randomly at \0 null byte in string
