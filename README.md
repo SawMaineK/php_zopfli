@@ -49,10 +49,7 @@ The second argument is the optional iteration counter (a value between 1 and [ma
 $buffer = 'put some longer story here ...';
 
 /*
- * Use zopfliencode() as replacement 
- * 
- * 
- *  gzencode()
+ * Use zopfliencode() as replacement for gzencode()
  * 
  * @param string  The string to encode/compress
  * @param integer Number of iterations for compression (1 - 1000 [default = 5])
