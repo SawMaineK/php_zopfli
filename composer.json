@@ -1,0 +1,19 @@
+{
+    "name": "zopfli",
+    "type": "extension",
+    "stability": "beta",
+    "version": "0.2.0",
+    "description": "PHP-Extension for compressing content with Zopfli a good zlib (gzip, deflate) compatible compressor which produces smallest possible results.",
+    "license": [
+                  "Apache License"
+    ],
+    "authors": [
+	{
+		"name": "Benjamin Carl",
+		"email": "opensource@clickalicious.de"
+	}
+    ],
+    "extra": {
+        "configure-options": []
+    }
+}
