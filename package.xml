@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.5.0RC2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+    <name>zopfli</name>
+    <channel>pecl.php.net</channel>
+    <summary>zopfli</summary>
+    <description>zopfli is an extension for PHP that ...</description>
+    <lead>
+        <name>Benjamin Carl</name>
+        <user>phpfluesterer</user>
+        <email>opensource@clickalicious.de</email>
+        <active>yes</active>
+    </lead>
+    <date>2015-03-01</date>
+    <time>15:00:00</time>
+    <version>
+        <release>0.2.0</release>
+        <api>0.2.0</api>
+    </version>
+    <stability>
+        <release>stable</release>
+        <api>stable</api>
+    </stability>
+    <license uri="http://www.php.net/license">PHP</license>
+    <notes>
+        * Initial release
+    </notes>
+    <contents>
+        <dir name="/">
+            <file name="CHANGELOG" role="doc" />
+            <file name="config.m4" role="src" />
+            <file name="config.w32" role="src" />
+            <file name="CONTRIBUTORS" role="doc" />
+            <file name="COPYING" role="doc" />
+            <file name="CREDITS" role="doc" />
+            <file name="EXPERIMENTAL" role="doc" />
+            <file name="INSTALL" role="doc" />
+            <file name="LICENSE" role="doc" />
+            <file name="php_zopfli.c" role="src" />
+            <file name="php_zopfli.h" role="src" />
+            <file name="README.md" role="doc" />
+            <file name="TODO" role="doc" />
+            <dir name="win32">
+                <file name="php_zopfli_win32.c" role="src" />
+                <file name="php_zopfli_win32.h" role="src" />
+                <file name="README.md" role="doc" />
+            </dir>
+            <dir name="zopfli">
+                <file name="blocksplitter.c" role="src" />
+                <file name="blocksplitter.h" role="src" />
+                <file name="cache.c" role="src" />
+                <file name="cache.h" role="src" />
+                <file name="CONTRIBUTORS" role="doc" />
+                <file name="COPYING" role="doc" />
+                <file name="deflate.c" role="src" />
+                <file name="deflate.h" role="src" />
+                <file name="gzip_container.c" role="src" />
+                <file name="gzip_container.h" role="src" />
+                <file name="hash.c" role="src" />
+                <file name="hash.h" role="src" />
+                <file name="katajainen.c" role="src" />
+                <file name="katajainen.h" role="src" />
+                <file name="lz77.c" role="src" />
+                <file name="lz77.h" role="src" />
+                <file name="makefile" role="doc" />
+                <file name="README" role="doc" />
+                <file name="squeeze.c" role="src" />
+                <file name="squeeze.h" role="src" />
+                <file name="tree.c" role="src" />
+                <file name="tree.h" role="src" />
+                <file name="util.c" role="src" />
+                <file name="util.h" role="src" />
+                <file name="zlib_container.c" role="src" />
+                <file name="zlib_container.h" role="src" />
+                <file name="zopfli.h" role="src" />
+                <file name="zopfli_bin.c" role="src" />
+                <file name="zopfli_lib.c" role="src" />
+            </dir>
+        </dir> <!-- / -->
+    </contents>
+    <dependencies>
+        <required>
+            <php>
+                <min>5.3.0</min>
+            </php>
+            <pearinstaller>
+                <min>1.4.0b1</min>
+            </pearinstaller>
+        </required>
+    </dependencies>
+    <providesextension>zopfli</providesextension>
+    <extsrcrelease />
+</package>
